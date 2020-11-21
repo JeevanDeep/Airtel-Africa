@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "601037270909",
+    "firebase_url": "https://airtel-africa-a218f.firebaseio.com",
+    "project_id": "airtel-africa-a218f",
+    "storage_bucket": "airtel-africa-a218f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:601037270909:android:88623f6f2c377791d72614",
+        "android_client_info": {
+          "package_name": "com.example.airtelafrica"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "601037270909-g4ilqeueqloqmvi7i08h4ph6nam68q8r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvZuRmCS3cBy8KcTexlcIidyA8jzdV7Q8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "601037270909-g4ilqeueqloqmvi7i08h4ph6nam68q8r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
