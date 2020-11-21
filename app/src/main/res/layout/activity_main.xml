@@ -1,22 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/captureID"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="Take Image Of ID" />
+        android:gravity="center"
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/captureFace"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Take Image of Face" />
 
-</LinearLayout>
+        <ImageView
+            android:id="@+id/idImage"
+            android:layout_width="300dp"
+            android:layout_height="300dp" />
+
+        <Button
+            android:id="@+id/captureID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Image Of ID" />
+
+
+        <ImageView
+            android:id="@+id/faceImage"
+            android:layout_width="300dp"
+            android:layout_height="300dp" />
+
+        <Button
+            android:id="@+id/captureFace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Image of Face" />
+
+    </LinearLayout>
+
+</ScrollView>
