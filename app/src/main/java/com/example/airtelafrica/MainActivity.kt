@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     private var faceImageUri: Uri? = null
     private var idImageUri: Uri? = null
 
-    private val TF_OD_API_INPUT_SIZE = 223
+    private val TF_OD_API_INPUT_SIZE = 112
     private val TF_OD_API_IS_QUANTIZED = false
     private val TF_OD_API_MODEL_FILE = "mobile_face_net.tflite"
     private val TF_OD_API_LABELS_FILE = "file:///android_asset/labelmap.txt"
@@ -88,18 +88,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun compareImages() {
         val faceImage = FirebaseVisionImage.fromFilePath(this, faceImageUri!!)
-        val scaledBitmap = Bitmap.createScaledBitmap(faceImage.bitmap, 224, 224, false)
+        val scaledBitmap = Bitmap.createScaledBitmap(faceImage.bitmap, TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, true)
 
         detector.detectInImage(FirebaseVisionImage.fromBitmap(scaledBitmap))
                 .addOnSuccessListener { faces ->
                     if (faces.size == 1) {
-                        facialRecognition.register("face", SimilarityClassifier.Recognition(
-                                "face",
-                                "face",
-                                .7f,
-                                RectF(faces[0].boundingBox)
-                        ))
-                        checkForSimilarity()
+                        val resultsAux: List<SimilarityClassifier.Recognition> = facialRecognition.recognizeImage(scaledBitmap, true)
+                        val confidence = resultsAux[0].distance
+                        if (resultsAux.isNotEmpty()) {
+                            val mappedResult = SimilarityClassifier.Recognition(
+                                    "0",
+                                    "face",
+                                    -1f,
+                                    RectF(faces[0].boundingBox)
+                            )
+                            mappedResult.extra = resultsAux[0].extra
+                            mappedResult.location = RectF(faces[0].boundingBox)
+
+                            facialRecognition.register("face", mappedResult)
+                            checkForSimilarity()
+                        }
                     } else {
                         // either zero faces or more than 1 face. show error
                     }
@@ -112,18 +120,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkForSimilarity() {
         val idImage = FirebaseVisionImage.fromFilePath(this, idImageUri!!)
-        val scaledBitmap = Bitmap.createScaledBitmap(idImage.bitmap, 224, 224, false)
+        val scaledBitmap = Bitmap.createScaledBitmap(idImage.bitmap, TF_OD_API_INPUT_SIZE, TF_OD_API_INPUT_SIZE, true)
         detector.detectInImage(FirebaseVisionImage.fromBitmap(scaledBitmap))
                 .addOnSuccessListener { faces ->
                     if (faces.size == 1) {
                         //the below code is crashing. need to fix
-//                        val ans = facialRecognition.recognizeImage(scaledBitmap, true)
+                        val ans = facialRecognition.recognizeImage(scaledBitmap, false)
+                        ans
                     } else {
                         // either zero faces or more than 1 face. show error
                     }
                 }
                 .addOnFailureListener { e ->
-
+                    e.printStackTrace()
                 }
     }
 
