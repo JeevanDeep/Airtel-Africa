@@ -21,6 +21,10 @@ import com.example.airtelafrica.Constants.FACE_IMAGE_NAME
 import com.example.airtelafrica.Constants.ID_IMAGE_NAME
 import com.example.airtelafrica.Constants.PERMISSION_REQUEST_CODE
 import com.example.airtelafrica.databinding.ActivityMainBinding
+import com.google.firebase.ml.vision.FirebaseVision
+import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.ml.vision.common.FirebaseVisionImageMetadata
+import com.google.firebase.ml.vision.face.FirebaseVisionFaceDetectorOptions
 import java.io.File
 import java.io.IOException
 
@@ -41,9 +45,48 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-        binding.captureFace.setOnClickListener { takeImage(ImageType.FACE) }
+        setOnClickListener()
+    }
 
-        binding.captureID.setOnClickListener { takeImage(ImageType.ID) }
+    private fun setOnClickListener() {
+        with(binding) {
+            captureFace.setOnClickListener { takeImage(ImageType.FACE) }
+            captureID.setOnClickListener { takeImage(ImageType.ID) }
+
+            compareButton.setOnClickListener {
+                if (idImageUri != null && faceImageUri != null) {
+                    compareImages()
+                }
+            }
+        }
+    }
+
+    private fun compareImages() {
+        val highAccuracyOpts = FirebaseVisionFaceDetectorOptions.Builder()
+                .setPerformanceMode(FirebaseVisionFaceDetectorOptions.ACCURATE)
+                .setLandmarkMode(FirebaseVisionFaceDetectorOptions.ALL_LANDMARKS)
+                .setClassificationMode(FirebaseVisionFaceDetectorOptions.ALL_CLASSIFICATIONS)
+                .build()
+
+        try {
+            val idImage = FirebaseVisionImage.fromFilePath(this, idImageUri!!)
+            val faceImage = FirebaseVisionImage.fromFilePath(this, faceImageUri!!)
+
+            val detector = FirebaseVision.getInstance().getVisionFaceDetector(highAccuracyOpts)
+
+            val result = detector.detectInImage(idImage)
+                    .addOnSuccessListener { faces ->
+                        // Task completed successfully
+                        // ...
+
+                    }
+                    .addOnFailureListener { e ->
+                        // Task failed with an exception
+                        // ...
+                    }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun takeImage(imageType: ImageType) {

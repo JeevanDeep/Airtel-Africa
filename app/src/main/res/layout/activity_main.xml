@@ -36,6 +36,12 @@
             android:layout_height="wrap_content"
             android:text="Take Image of Face" />
 
+
+        <Button
+            android:id="@+id/compareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compare Faces" />
     </LinearLayout>
 
 </ScrollView>
